@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}
+    <h1>Aperçu</h1>
+{% endblock %}
+
+{% block title %}Task{% endblock %}
+
+{% block body %}
+    <h1>Détail de la tâche</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Titre :</th>
+                <td>{{ task.title }}</td>
+            </tr>
+            <tr>
+                <th>Crée le :</th>
+                <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Contenu :</th>
+                <td>{{ task.content }}</td>
+            </tr>
+            <tr>
+                <th>Terminé :</th>
+                <td>{{ task.isDone ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Autheur :</th>
+                <td>{{ task.user }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_task_index') }}" class="btn btn-primary">Retour à la liste</a>
+{% endblock %}

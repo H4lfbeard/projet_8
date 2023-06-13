@@ -57,19 +57,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+        $this->roles = ['ROLE_USER']; // Set the default role to 'ROLE_USER'
     }
 
-    public function getId(): ?int
+    public function __toString()
+    {
+        return $this->getUsername();
+    }
+
+    public function getId():  ? int
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail() :  ? string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email) : self
     {
         $this->email = $email;
 
@@ -99,11 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -134,7 +136,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
-    public function getSalt(): ?string
+    public function getSalt():  ? string
     {
         return null;
     }
@@ -148,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(string $username) : self
     {
         $this->username = $username;
 

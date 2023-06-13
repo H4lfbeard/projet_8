@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block header_title %}
+    <h1>Liste des tâches</h1>
+{% endblock %}
+
+{% block title %}Task index{% endblock %}
+
+{% block body %}
+    <h1>Tâches terminées</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre :</th>
+                <th>Crée le :</th>
+                <th>Contenu :</th>
+                <th>action :</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.createdAt ? task.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ task.content }}</td>
+                <td>
+                    <a href="{{ path('app_task_show', {'id': task.id}) }}" class="btn btn-primary button-spacing">Voir</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_task_new') }}" class="btn btn-success button-spacing">Ajouter une nouvelle tâche</a>
+{% endblock %}

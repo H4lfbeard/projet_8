@@ -27,9 +27,9 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    /**
-     * @Route("/register", name="app_register")
-     */
+/**
+ * @Route("/register", name="app_register")
+ */
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -37,18 +37,19 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+            // Encode the plain password
+            $password = $form->get('plainPassword')->getData();
+            $hashedPassword = $userPasswordHasher->hashPassword($user, $password);
+            $user->setPassword($hashedPassword);
+
+            // Get the selected role
+            $role = $form->get('roles')->getData();
+            $user->setRoles([$role]);
 
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
+            // Generate a signed URL and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('no-reply@todoco.com', 'ToDoCo.test'))
@@ -56,8 +57,8 @@ class RegistrationController extends AbstractController
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
 
+            // Authenticate the user and redirect
             return $userAuthenticator->authenticateUser(
                 $user,
                 $authenticator,
@@ -65,6 +66,7 @@ class RegistrationController extends AbstractController
             );
         }
 
+        // Render the registration form
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
