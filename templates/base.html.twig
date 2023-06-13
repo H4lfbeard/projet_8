@@ -28,8 +28,7 @@
         <nav class="navbar navbar-light navbar-fixed-top" style="background-color: #e3f2fd;" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">To Do List app</a>
-
+                    <a class="navbar-brand" href="{{ path('homepage') }}">To Do List app</a>
                     <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
                 </div>
             </div>
@@ -38,14 +37,21 @@
         <!-- Page Content -->
         <div class="container">
             <div class="row">
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-
+                {% if not app.user %}
+                    <a href="{{ path('app_register') }}" class="btn btn-primary button-spacing">Créer un utilisateur</a>
+                {% endif %} 
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_user_index') }}" class="btn btn-primary button-spacing">Voir la liste des utilisateurs</a>
+                {% endif %}
                 {% if app.user %}
-                <a href="{{ path('logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                    <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger button-spacing">Se déconnecter</a>
+                {% endif %}
+                {% if is_granted('ROLE_USER') %}
+                    <a href="{{ path('app_user_show', {'id': app.user.id}) }}" class="pull-right btn btn-primary button-spacing">Mon profil</a>
                 {% endif %}
 
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{{ path('login') }}" class="btn btn-success">Se connecter</a>
+                <a href="{{ path('app_login') }}" class="btn btn-success button-spacing">Se connecter</a>
                 {% endif %}
             </div>
 
@@ -88,7 +94,6 @@
                     </div>
                 </div>
             </footer>
-
         </div>
 
         <script src="{{ asset('js/jquery.js') }}"></script>

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TaskRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=TaskRepository::class)
@@ -23,6 +24,7 @@ class Task
     private $title;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime_immutable")
      */
     private $createdAt;
@@ -42,68 +44,78 @@ class Task
      */
     private $user;
 
-    public function getId(): ?int
+    public function getId():  ? int
     {
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getTitle() :  ? string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(string $title) : self
     {
         $this->title = $title;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt():  ? \DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt) : self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getContent(): ?string
+    public function getContent():  ? string
     {
         return $this->content;
     }
 
-    public function setContent(?string $content): self
+    public function setContent( ? string $content) : self
     {
         $this->content = $content;
 
         return $this;
     }
 
-    public function isIsDone(): ?bool
+    public function isIsDone() :  ? bool
     {
         return $this->isDone;
     }
 
-    public function setIsDone(bool $isDone): self
+    public function setIsDone(bool $isDone) : self
     {
         $this->isDone = $isDone;
 
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getUser():  ? User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser( ? User $user) : self
     {
         $this->user = $user;
 
         return $this;
+    }
+
+    public function isDone()
+    {
+        return $this->isDone;
+    }
+
+    public function toggle($flag)
+    {
+        $this->isDone = $flag;
     }
 }
